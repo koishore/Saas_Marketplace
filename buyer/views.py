@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http.response import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from sawo import createTemplate, getContext, verifyToken
 import json
 import os
@@ -28,7 +28,8 @@ def setLoaded(reset=False):
 createTemplate("templates/partials")
 
 def index(request):
-    return render(request,"index.html")
+
+    return render(request,"buyer.html")
 
 def login(request):
     setLoaded()
@@ -50,10 +51,8 @@ def receive(request):
         setPayload(payload)
         print(payload)
 
-        status = 200 if verifyToken(payload) else 404
-        print(status)
-        response_data = {"status":status}
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return redirect('/buyer/products')
+        # return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
 def products(request):

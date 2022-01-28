@@ -6,6 +6,7 @@ from sawo import createTemplate, getContext, verifyToken
 import json
 import os
 import requests
+from django.template import loader
 
 
 load = ''
@@ -26,7 +27,7 @@ def setLoaded(reset=False):
 createTemplate("templates/partials")
 
 def index(request):
-    return render(request,"index.html")
+    return render(request,"seller.html")
 
 def login(request):
     setLoaded()
@@ -62,9 +63,9 @@ def receive(request):
             print('party')
             email = payload.get('identifier')
             duplicate_users = User.objects.filter(email=email)
-            print(duplicate_users, 'ho raha hai')
+            
             if not duplicate_users.exists():
-                print('maaro mujhe')
+                print('new User')
                 user_id = payload.get('user_id')
                 is_buyer = False
                 is_seller = True
@@ -77,5 +78,17 @@ def receive(request):
                                             is_seller=is_seller,
                                             seller_name=str(seller_name))
 
+        print(duplicate_users, 'ho raha hai ---user')
         response_data = {"status": status}
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        # return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return render(request,"index.html", {})
+
+def seller_home(request):
+
+    template=loader.get_template('seller/index.html')
+
+    context={
+        
+    }
+
+    return HttpResponse(template.render(context, request))

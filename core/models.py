@@ -16,7 +16,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_user(self, username, email, is_buyer, is_seller, seller_name):
-        return self._create_user(self, username, email, is_buyer, is_seller, seller_name)
+        return self._create_user(username, email, is_buyer, is_seller, seller_name)
 
     def create_superuser(self, username, email, is_buyer, is_seller, seller_name):
         user = self._create_user(self, username, email, is_buyer, is_seller, seller_name)
@@ -25,14 +25,14 @@ class UserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser):
-    username = models.CharField(unique = True, max_length = 128, default='')
+    username = models.CharField(max_length = 128,unique=True)
     email = models.EmailField(max_length=254, unique=True)
     is_buyer = models.BooleanField(default=False)
     is_seller = models.BooleanField(default=False)
     seller_name = models.CharField(max_length=100, default = '')
     password = None
 
-    USERNAME_FILED = 'username'
+    USERNAME_FIELD = 'username'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
 
